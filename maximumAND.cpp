@@ -39,8 +39,8 @@ int main() {
             //cout << v[30-i].first <<" " << v[30-i].second << endl;
         }
         
-        //sort(v.begin(), v.end(), comparator());
-        sort(v.rbegin(), v.rend());
+        sort(v.begin(), v.end(), comparator());
+        //sort(v.rbegin(), v.rend());
 
         ll x=0;
         for(int i=0; i<k; i++){
