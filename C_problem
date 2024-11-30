@@ -1,0 +1,104 @@
+Solution for 
+C. Trapped in the Witch's Labyrinth :-
+
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 1e3 + 1;
+int visited[N][N];
+string grid[N];
+
+void sol() {
+
+    int rows, cols;
+    cin >> rows >> cols;
+
+    // Reset visited array @AcceptedCode
+    memset(visited, 0, sizeof(visited));
+
+    // Input the grid
+    for (int i = 0; i < rows; ++i) {
+        cin >> grid[i];
+    }
+
+    queue<pair<int, int>> queue;
+
+    // Mark border cells with directions and push them into the queue
+    for (int i = 0; i < rows; ++i) {
+        if (grid[i][0] == 'L') {
+            visited[i][0] = 1;
+            queue.emplace(i, 0);
+        }
+        if (grid[i][cols - 1] == 'R') {
+            visited[i][cols - 1] = 1;
+            queue.emplace(i, cols - 1);
+        }
+    }
+
+    for (int j = 0; j < cols; ++j) {
+        if (grid[0][j] == 'U') {
+            visited[0][j] = 1;
+            queue.emplace(0, j);
+        }
+        if (grid[rows - 1][j] == 'D') {
+            visited[rows - 1][j] = 1;
+            queue.emplace(rows - 1, j);
+        } 
+    }
+
+    // BFS traversal to mark reachable cells @AcceptedCode
+    while (!queue.empty()) {
+        int r = queue.front().first;
+        int c = queue.front().second;
+        queue.pop();
+
+        // Check and push adjacent cells based on direction rules
+        if (r > 0 && !visited[r - 1][c] && grid[r - 1][c] == 'D') {
+            visited[r - 1][c] = 1;
+            queue.emplace(r - 1, c);
+        }
+        if (r < rows - 1 && !visited[r + 1][c] && grid[r + 1][c] == 'U') {
+            visited[r + 1][c] = 1;
+            queue.emplace(r + 1, c);
+        }
+        if (c > 0 && !visited[r][c - 1] && grid[r][c - 1] == 'R') {
+            visited[r][c - 1] = 1;
+            queue.emplace(r, c - 1);
+        }
+        if (c < cols - 1 && !visited[r][c + 1] && grid[r][c + 1] == 'L') {
+            visited[r][c + 1] = 1;
+            queue.emplace(r, c + 1);
+        }
+    }
+
+    int result = 0;
+
+    // Count unreachable or invalid cells @AcceptedCode
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (!visited[i][j] && grid[i][j] != '?') {
+                ++result;
+            } else if (!visited[i][j] && grid[i][j] == '?') {
+                bool valid = true;
+                if (i > 0) valid &= visited[i - 1][j];
+                if (j > 0) valid &= visited[i][j - 1];
+                if (i < rows - 1) valid &= visited[i + 1][j];
+                if (j < cols - 1) valid &= visited[i][j + 1];
+                result += !valid;
+            }
+        }
+    }
+
+    cout << result;
+}
+
+int main() {
+    // @AcceptedCode
+    int test_cases;
+    cin >> test_cases;
+    while (test_cases--) {
+        sol();
+        cout << '\n';
+    }
+    return 0;
+}
